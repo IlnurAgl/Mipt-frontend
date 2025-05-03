@@ -4,9 +4,9 @@ import MenuItem from './MenuItem';
 export default function NavBar() {
     return (
       <Flex gap="28px" p="35px 50px 0px 0px">
-        <MenuItem>Все фильмы</MenuItem>
-        <MenuItem>Избранное</MenuItem>
-        <MenuItem>Добавить фильм</MenuItem>
+        <MenuItem to="/">Все фильмы</MenuItem>
+        <MenuItem to="/favorites">Избранное</MenuItem>
+        <MenuItem to="/addFilm">Добавить фильм</MenuItem>
       </Flex>
     );
   }
