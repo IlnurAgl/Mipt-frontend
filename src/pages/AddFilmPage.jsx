@@ -107,10 +107,9 @@ export default function AddFilmPage() {
   
             </Grid>
           </Fieldset.Content>
-
-          <Button type="submit" alignSelf="flex-start" bg="#4A61DDB2">
-            Добавить фильм
-          </Button>  
+          <Center p="20px 0 0 0">
+          <Button type="submit" alignSelf="flex-start" bg="#4A61DDB2">Добавить фильм</Button>  
+          </Center>
           </Fieldset.Root>
       </Box>
     </Center>

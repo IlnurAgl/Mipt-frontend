@@ -1,4 +1,4 @@
-import { Icon, Box, Text, Flex, Image, Heading } from "@chakra-ui/react"
+import { Icon, Box, Text, Flex, Image, Link } from "@chakra-ui/react"
 import { SlClock } from "react-icons/sl";
 import { CiStar } from "react-icons/ci";
 import { FaStar } from "react-icons/fa6";
@@ -21,7 +21,7 @@ export default function FilmCard(data) {
     <Box maxW="350px" borderWidth="1px" rounded="10px" minH="325px">
     <Image src={data.imageUrl} alt={data.imageAlt} rounded="8px 8px 0 0 "/>
     <Flex p='30px 40px 30px 20px' direction='column' gap='10px'>
-      <Heading fontSize="24px" fontWeight="bold">{data.title}</Heading>
+      <Link fontSize="24px" fontWeight="bold">{data.title}</Link>
       <Flex justify={"space-between"} align={'center'}>
         {typeText}
         <Flex align={'center'} gap="8px"><SlClock />{data.duration} мин.</Flex>
