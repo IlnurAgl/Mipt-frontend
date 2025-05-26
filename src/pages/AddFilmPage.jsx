@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { Button, Field, Fieldset, Input, Box, Center,
   Grid, GridItem, Textarea, FileUpload, Flex, Text, HStack, Checkbox } from "@chakra-ui/react"
@@ -6,6 +7,7 @@ import HeadingPage from '../HeadingPage'
 import { HiUpload } from "react-icons/hi"
 
 export default function AddFilmPage() {
+  const navigate = useNavigate()
   const [formData, setFormData] = useState({
     name: '',
     film_type: '',
@@ -35,6 +37,7 @@ export default function AddFilmPage() {
     try {
       const response = await axios.post('http://127.0.0.1:8000/films', formData)
       console.log('Фильм успешно добавлен', response.data)
+      navigate('/')
     } catch (error) {
       console.error('Ошибка при добавлении фильма:', error.response?.data || error.message)
     }
