@@ -71,13 +71,13 @@ export default function FilmPage() {
   if (error) return <div>Error: {error}</div>;
   if (!film) return <div>No film data</div>;
 
-  const data_type = film.genre || 'Боевик';
+  const data_type = film.film_type || 'Боевик';
   let typeText;
-  if (data_type === 'Боевик') {
+  if (data_type === 'боевик') {
     typeText = <Text bg={'#EA92631F'} borderRadius={'24px'} p='0px 12px' color='#E26C2D'>{data_type}</Text>
-  } else if (data_type === 'Драма') {
+  } else if (data_type === 'драма') {
     typeText = <Text bg={'#958F8F1F'} borderRadius={'24px'} p='0px 12px' color='#958F8F'>{data_type}</Text>
-  } else if (data_type === 'Триллер') {
+  } else if (data_type === 'триллер') {
     typeText = <Text bg={'#49B64E1F'} borderRadius={'24px'} p='0px 12px' color='#49B64E'>{data_type}</Text>
   } else {
     typeText = <Text bg={'#8775D21F'} borderRadius={'24px'} p='0px 12px' color='#8775D2'>{data_type}</Text>

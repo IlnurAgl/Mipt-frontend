@@ -70,6 +70,7 @@ export default function AddFilmPage() {
                 <HStack>
 
                 <Checkbox.Root colorPalette={"orange"} name="film_type" value="боевик"
+                  checked={formData.film_type === 'боевик'}
                   onChange={(e) => setFormData(prev => ({ ...prev, film_type: e.target.checked ? 'боевик' : '' }))}>
                   <Checkbox.HiddenInput />
                   <Checkbox.Control rounded={"full"} borderColor={"orange"} />
@@ -77,21 +78,24 @@ export default function AddFilmPage() {
                 </Checkbox.Root>
 
                 <Checkbox.Root colorPalette={"green"} name="film_type" value="триллер"
-                  onChange={(e) => setFormData(prev => ({ ...prev, film_type: e.target.checked ? 'триллер' : '' }))}>
+                  checked={formData.film_type === 'триллер'}
+                  onChange={(e) => setFormData(prev => ({ ...prev, film_type: e.target.checked ? 'триллер' : prev.film_type === 'триллер' ? '' : prev.film_type }))}>
                   <Checkbox.HiddenInput />
                   <Checkbox.Control rounded={"full"} borderColor={"green"} />
                   <Checkbox.Label>Триллер</Checkbox.Label>
                 </Checkbox.Root>
 
                 <Checkbox.Root colorPalette={"blue"} name="film_type" value="комедия"
-                  onChange={(e) => setFormData(prev => ({ ...prev, film_type: e.target.checked ? 'комедия' : '' }))}>
+                  checked={formData.film_type === 'комедия'}
+                  onChange={(e) => setFormData(prev => ({ ...prev, film_type: e.target.checked ? 'комедия' : prev.film_type === 'комедия' ? '' : prev.film_type }))}>
                   <Checkbox.HiddenInput />
                   <Checkbox.Control rounded={"full"} borderColor={"blue"} />
                   <Checkbox.Label>Комедия</Checkbox.Label>
                 </Checkbox.Root>
 
                 <Checkbox.Root colorPalette={"black"} name="film_type" value="драма"
-                  onChange={(e) => setFormData(prev => ({ ...prev, film_type: e.target.checked ? 'драма' : '' }))}>
+                  checked={formData.film_type === 'драма'}
+                  onChange={(e) => setFormData(prev => ({ ...prev, film_type: e.target.checked ? 'драма' : prev.film_type === 'драма' ? '' : prev.film_type }))}>
                   <Checkbox.HiddenInput />
                   <Checkbox.Control rounded={"full"} borderColor={"black"} />
                   <Checkbox.Label>Драма</Checkbox.Label>
