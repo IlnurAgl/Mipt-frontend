@@ -1,44 +1,87 @@
 
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import HeadingPage from '../HeadingPage'
-import { Flex, Box, Grid, HStack, Checkbox } from '@chakra-ui/react'
+import { Flex, Box, Grid, HStack, Checkbox, Spinner } from '@chakra-ui/react'
 import FilmCard from '../FilmCard'
 import FilterItem from '../FilterItem'
-import ImageCard from '../assets/card-img.png'
-import ImageCard1 from '../assets/card-img-1.png'
-import ImageCard2 from '../assets/card-img-2.png'
-import ImageCard3 from '../assets/card-img-3.png'
-import ImageCard4 from '../assets/card-img-4.png'
-import ImageCard5 from '../assets/card-img-5.png'
-import ImageCard6 from '../assets/card-img-6.png'
-import ImageCard7 from '../assets/card-img-7.png'
-import ImageCard8 from '../assets/card-img-8.png'
 import { FaCheckCircle } from "react-icons/fa";
 
 export default function MainPage() {
+  const [films, setFilms] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedTypes, setSelectedTypes] = useState(['Боевик', 'Триллер', 'Комедия', 'Драма']);
+
+  const handleTypeChange = (type, isChecked) => {
+    setSelectedTypes(prev =>
+      isChecked
+        ? [...prev, type]
+        : prev.filter(t => t !== type)
+    );
+  };
+
+  const capitalizeFirstLetter = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  };
+
+  useEffect(() => {
+    const fetchFilms = async () => {
+      try {
+        const response = await axios.get('http://127.0.0.1:8000/films');
+        setFilms(response.data.map(film => ({
+          ...film,
+          type: capitalizeFirstLetter(film.film_type)
+        })));
+      } catch (error) {
+        console.error('Error fetching films:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFilms();
+  }, []);
+
   return (
     <Box>
       <Flex justify={'space-between'} align={'center'}>
       <HeadingPage>Все фильмы</HeadingPage>
       <HStack align={"center"}>
-      <Checkbox.Root colorPalette={"orange"} defaultChecked>
+      <Checkbox.Root
+        colorPalette={"orange"}
+        defaultChecked
+        onChange={(e) => handleTypeChange('Боевик', e.target.checked)}
+      >
         <Checkbox.HiddenInput />
         <Checkbox.Control rounded={"full"} borderColor={"orange"} />
         <Checkbox.Label>Боевик</Checkbox.Label>
       </Checkbox.Root>
 
-      <Checkbox.Root colorPalette={"green"} defaultChecked>
+      <Checkbox.Root
+        colorPalette={"green"}
+        defaultChecked
+        onChange={(e) => handleTypeChange('Триллер', e.target.checked)}
+      >
         <Checkbox.HiddenInput />
         <Checkbox.Control rounded={"full"} borderColor={"green"} />
         <Checkbox.Label>Триллер</Checkbox.Label>
       </Checkbox.Root>
 
-      <Checkbox.Root colorPalette={"blue"} defaultChecked>
+      <Checkbox.Root
+        colorPalette={"blue"}
+        defaultChecked
+        onChange={(e) => handleTypeChange('Комедия', e.target.checked)}
+      >
         <Checkbox.HiddenInput />
         <Checkbox.Control rounded={"full"} borderColor={"blue"} />
         <Checkbox.Label>Комедия</Checkbox.Label>
       </Checkbox.Root>
 
-      <Checkbox.Root colorPalette={"black"} defaultChecked>
+      <Checkbox.Root
+        colorPalette={"black"}
+        defaultChecked
+        onChange={(e) => handleTypeChange('Драма', e.target.checked)}
+      >
         <Checkbox.HiddenInput />
         <Checkbox.Control rounded={"full"} borderColor={"black"} />
         <Checkbox.Label>Драма</Checkbox.Label>
@@ -46,17 +89,31 @@ export default function MainPage() {
       </HStack>
       </Flex>
   
-      <Grid templateColumns={"repeat(3, 1fr)"} gap="{60px 50px}" padding={"25px 0px 140px 0px"}>
-      <FilmCard imageAlt="test" imageUrl={ImageCard} title="Матрица" type="Боевик" duration="136" star={true}/>
-      <FilmCard imageAlt="test" imageUrl={ImageCard1} title="Безумный макс" type="Боевик" duration="88"/>
-      <FilmCard imageAlt="test" imageUrl={ImageCard2} title="Джентельмены" type="Драма" duration="113"/>
-      <FilmCard imageAlt="test" imageUrl={ImageCard3} title="Отступники" type="Триллер" duration="151"/>
-      <FilmCard imageAlt="test" imageUrl={ImageCard4} title="Гладиатор" type="Боевик" duration="155"/>
-      <FilmCard imageAlt="test" imageUrl={ImageCard5} title="Однажды в Голливиде" type="Драма" duration="161" star={true}/>
-      <FilmCard imageAlt="test" imageUrl={ImageCard6} title="Предложение" type="Комедия" duration="108"/>
-      <FilmCard imageAlt="test" imageUrl={ImageCard7} title="Малышка на миллион" type="Драма" duration="132" star={true}/>
-      <FilmCard imageAlt="test" imageUrl={ImageCard8} title="Ларри Краун" type="Комедия" duration="98"/>
-      </Grid>
+      {loading ? (
+        <Flex justify="center" align="center" height="300px">
+          <Spinner size="xl" />
+        </Flex>
+      ) : (
+        <Grid templateColumns={"repeat(3, 1fr)"} gap="{60px 50px}" padding={"25px 0px 140px 0px"}>
+          {films
+            .filter(film =>
+              selectedTypes.length === 0 ||
+              selectedTypes.includes(film.type)
+            )
+            .map((film, index) => (
+            <FilmCard
+              key={index}
+              id={film.id}
+              imageAlt={film.name}
+              imageUrl={film.image}
+              name={film.name}
+              type={film.type}
+              duration={film.duration}
+              star={film.star}
+            />
+          ))}
+        </Grid>
+      )}
     </Box>
   );
 }

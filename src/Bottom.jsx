@@ -1,12 +1,14 @@
 import { Box, Center, Flex, Text }  from '@chakra-ui/react';
 
 export default function Bottom() {
-    return (
-        <Center height='91px' width='100%' axis='vertical'>
-        <Box bg='#000000' height='91px' width='100%' alignContent={'center'} left='0px' position={'absolute'}>
-            <Text color='#FFFFFF' fontSize='16px' font='Inter' p='0px 0px 0px 255px'>Фильмограф</Text>
+  return (
+    <Box w={"100%"} bg="#000000" h="91px" alignContent={'center'} position={'absolute'} bottom='0'>  
+      <Center>
+        <Box w={"1170px"}>
+          <Text color='#FFFFFF' fontSize='16px' font='Inter' p='0px 0px 0px 0px'>Фильмограф</Text>
         </Box>
-        </Center>
+      </Center>
+    </Box>
     );
   }
   

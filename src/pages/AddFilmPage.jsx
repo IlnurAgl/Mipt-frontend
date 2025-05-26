@@ -1,15 +1,51 @@
+import { useState } from 'react'
+import axios from 'axios'
 import { Button, Field, Fieldset, Input, Box, Center,
   Grid, GridItem, Textarea, FileUpload, Flex, Text, HStack, Checkbox } from "@chakra-ui/react"
 import HeadingPage from '../HeadingPage'
 import { HiUpload } from "react-icons/hi"
 
 export default function AddFilmPage() {
+  const [formData, setFormData] = useState({
+    name: '',
+    film_type: '',
+    duration: '',
+    description: '',
+    image: null
+  })
+  const handleInputChange = (e) => {
+    const { name, value } = e.target
+    setFormData(prev => ({ ...prev, [name]: value }))
+  }
+
+  const handleImageChange = async (files) => {
+    if (files.length > 0) {
+      const file = files[0]
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setFormData(prev => ({ ...prev, image: reader.result }))
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    console.log('Submitting form data:', formData)
+    try {
+      const response = await axios.post('http://127.0.0.1:8000/films', formData)
+      console.log('Фильм успешно добавлен', response.data)
+    } catch (error) {
+      console.error('Ошибка при добавлении фильма:', error.response?.data || error.message)
+    }
+  }
+
   return (
     <Box p="0 0 100px 0">
     <HeadingPage>Добавить фильм</HeadingPage>
     <Center>
       <Box w="770px" border={"1px solid #EEEEEE"} p={"50px"} borderRadius={"16px"}>
-        <Fieldset.Root>
+        <Fieldset.Root as="form" onSubmit={handleSubmit}>
           <Fieldset.Content>
             <Grid templateColumns="repeat(2, 1fr)" gap="20px">
 
@@ -19,7 +55,7 @@ export default function AddFilmPage() {
                 </Field.Root>
               </GridItem>
               <GridItem>
-                <Input name="name" />
+                <Input name="name" value={formData.name} onChange={handleInputChange} />
               </GridItem>
   
               <GridItem>
@@ -30,25 +66,29 @@ export default function AddFilmPage() {
               <GridItem>
                 <HStack>
 
-                <Checkbox.Root colorPalette={"orange"}>
+                <Checkbox.Root colorPalette={"orange"} name="film_type" value="боевик"
+                  onChange={(e) => setFormData(prev => ({ ...prev, film_type: e.target.checked ? 'боевик' : '' }))}>
                   <Checkbox.HiddenInput />
                   <Checkbox.Control rounded={"full"} borderColor={"orange"} />
                   <Checkbox.Label>Боевик</Checkbox.Label>
                 </Checkbox.Root>
 
-                <Checkbox.Root colorPalette={"green"}>
+                <Checkbox.Root colorPalette={"green"} name="film_type" value="триллер"
+                  onChange={(e) => setFormData(prev => ({ ...prev, film_type: e.target.checked ? 'триллер' : '' }))}>
                   <Checkbox.HiddenInput />
                   <Checkbox.Control rounded={"full"} borderColor={"green"} />
                   <Checkbox.Label>Триллер</Checkbox.Label>
                 </Checkbox.Root>
 
-                <Checkbox.Root colorPalette={"blue"}>
+                <Checkbox.Root colorPalette={"blue"} name="film_type" value="комедия"
+                  onChange={(e) => setFormData(prev => ({ ...prev, film_type: e.target.checked ? 'комедия' : '' }))}>
                   <Checkbox.HiddenInput />
                   <Checkbox.Control rounded={"full"} borderColor={"blue"} />
                   <Checkbox.Label>Комедия</Checkbox.Label>
                 </Checkbox.Root>
 
-                <Checkbox.Root colorPalette={"black"}>
+                <Checkbox.Root colorPalette={"black"} name="film_type" value="драма"
+                  onChange={(e) => setFormData(prev => ({ ...prev, film_type: e.target.checked ? 'драма' : '' }))}>
                   <Checkbox.HiddenInput />
                   <Checkbox.Control rounded={"full"} borderColor={"black"} />
                   <Checkbox.Label>Драма</Checkbox.Label>
@@ -63,7 +103,7 @@ export default function AddFilmPage() {
               </GridItem>
               <GridItem>
                 <Flex gap="10px" align={"center"}>
-                  <Input w="84px" name="duration" />
+                  <Input w="84px" name="duration" value={formData.duration} onChange={handleInputChange} />
                   <Text>мин.</Text>
                 </Flex>
               </GridItem>
@@ -74,16 +114,7 @@ export default function AddFilmPage() {
                 </Field.Root>
               </GridItem>
               <GridItem>
-                <Input name="description" />
-              </GridItem>
-
-              <GridItem>
-                <Field.Root>
-                <Field.Label>Описание</Field.Label>
-                </Field.Root>
-              </GridItem>
-              <GridItem>
-                <Textarea variant="outline" h="184px" />
+                <Textarea name="description" value={formData.description} onChange={handleInputChange} variant="outline" h="184px" />
               </GridItem>
 
               <GridItem>
@@ -92,7 +123,7 @@ export default function AddFilmPage() {
                 </Field.Root>
               </GridItem>
               <GridItem inline="true">
-              <FileUpload.Root accept={["image/png"]}>
+              <FileUpload.Root accept={["image/png"]} onChange={(e) => handleImageChange(e.target.files)}>
                 <FileUpload.HiddenInput />
                 <Flex gap="30px" align={"center"}>
                 <FileUpload.Trigger asChild>
@@ -108,7 +139,7 @@ export default function AddFilmPage() {
             </Grid>
           </Fieldset.Content>
           <Center p="20px 0 0 0">
-          <Button type="submit" alignSelf="flex-start" bg="#4A61DDB2">Добавить фильм</Button>  
+          <Button type="submit" alignSelf="flex-start" bg="#4A61DDB2" onClick={handleSubmit}>Добавить фильм</Button>
           </Center>
           </Fieldset.Root>
       </Box>

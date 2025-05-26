@@ -5,12 +5,16 @@ import { Outlet } from "react-router";
 
 function App() {
   return (
-    <Center>
-    <Box w="1170px">
-      <NavBar />
-      <Outlet />
-      <Bottom />
-    </Box>
+    <Center w="100%">
+      <Box w="100%">
+        <Center>
+          <Box w="1170px">
+            <NavBar />
+            <Outlet />
+          </Box>
+        </Center>
+        <Bottom />
+      </Box>
     </Center>
   )
 }
